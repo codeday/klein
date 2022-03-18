@@ -115,6 +115,7 @@ func (b *Klein) create(w http.ResponseWriter, r *http.Request) {
 
 	// set an alias
 	alias := r.FormValue("alias")
+	_, overwrite := r.Form["overwrite"]
 	if alias == "" {
 		exists := true
 		for exists {
@@ -135,7 +136,7 @@ func (b *Klein) create(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if exists {
+		if exists && !overwrite {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte("code already exists"))
 			return
